@@ -5,9 +5,11 @@
 	<meta charset="utf-8">
 	<title>Game of Thrones - Best Episodes</title>
 	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css" type="text/css">
-	<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
 	<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
-
+	<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+	<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
 	<style>
 
 		@font-face {
@@ -21,8 +23,11 @@
 		#page {
 			background-image: url("./images/bg.jpg");
 			background-repeat: no-repeat;
+			background-color: rgb(14,20,20);
+			/*background-position: 0px -60px;*/
 			background-size: contain;
 			padding: 0px;
+			font-family: Abel;
 		}
 
 		#topHalf  {
@@ -33,8 +38,20 @@
 			height: 133px;
 		}
 
+		#topHalf #reloadButton {
+			font-size: 28px;
+			color: white;
+			background: none;
+		}
+
 		#panneau {
 			background-color:rgba(135,156,210, 0.3);
+			text-align: center;
+		}
+
+		#panneau > h1 {
+			font-weight: bold;
+			color: black;
 		}
 
 		#bottomHalf {
@@ -46,13 +63,13 @@
 			color: white;
 		}
 
-		#bottomHalf .w3-half:first-child, #panneau > h1 {
+		#bottomHalf > .w3-col:first-child, #panneau > h1 {
 			font-family: 'goffont', 'Times New Roman', serif;
 
 
 		}
 
-		#bottomHalf > .w3-half:first-child {
+		#bottomHalf > .w3-col:first-child {
 			font-size: 200%;	
 			text-align: center;
 			font-weight: bold;
@@ -62,32 +79,54 @@
 			vertical-align: middle;
 		}
 
-		#bottomHalf > .w3-half:first-child > div {
+		#bottomHalf > .w3-col:first-child > div {
 			align-self: center;
 			display: inline-block;
 		}
 
-		#bottomHalf > .w3-half:first-child span:nth-of-type(2) {
+		#bottomHalf > .w3-col:first-child span:nth-of-type(2) {
 			color: rgb(13,31,68);
 		}
+
+		#bottomHalf .duration {
+			color: rgb(84,88,88);
+		}
+
+		#bottomHalf .souligne {
+			border-bottom: 1px solid rgb(64,68,68);
+		}
+
+		#bottomHalf .likeCol {
+			text-align: right;
+		}
+
+		.w3-circle {
+			background: none;
+			font-size: 0.5em;
+			border: 1px solid white;
+			padding : 4px;
+		}
+
 	</style>
 </head>
-<body>
+<body ng-app="episodesApp" ng-controller="episodesController">
 
 	<div class="w3-container" id="page">
 
 		<!-- <img src="/images/bg.jpg" style="visibility: hidden" > -->
-		<div class="w3-row" id="topHalf">
+		<div class="w3-row " id="topHalf">
 
 			<div class="w3-row">
-				
+				<div class="w3-col w3-container">
+					<div id="reloadButton" type="button" class="w3-right" ng-click="recharger()"><i class="fa fa-refresh" ></i></div>
+				</div>
 
 			</div>
 
 			<div class="w3-row">
-				<div class="w3-third">&nbsp;</div>
-				<div class="w3-third" id="panneau"><h1>Game of Thrones</h1><p>Best episodes</p></div>
-				<div class="w3-third">&nbsp;</div>
+				<div class="w3-third m2 s12">&nbsp;</div>
+				<div class="w3-third m8 s12" id="panneau"><h1>Game of Thrones</h1><p>Best episodes</p></div>
+				<div class="w3-third m2 s12">&nbsp;</div>
 			</div>
 
 
@@ -99,15 +138,16 @@
 		</div>
 
 		<div class="w3-row" id="bottomHalf">
-			<div class="w3-half">
+			<div class="w3-col l6 m12 s12">
 				<div><span>Season</span><br><span>6</span></div>
 			</div>
 
-			<div class="w3-half" ng-controller="episodesController" ng-app="episodesApp">
-				<div class="w3-row" ng-repeat="ep in episodes">
-					<div class="w3-third">{{ep.title}}<br>{{ep.duration}}</div>
-					<div class="w3-third"></div>
-					<div class="w3-third">{{ep.like}}</div>
+			<div class="w3-half w3-container s12 m12"  >
+				<div class="w3-row" ng-repeat="ep in episodes" data-id="{{ep.id}}">
+					<div class=" w3-container w3-col l4 m3 s8">{{ep.title}}<br><span class="duration">{{ep.durationMsg}}</span></div>
+					<div class="w3-col l1 m1 s1 souligne w3-container"></div>
+					<div class="l3 s3 w3-col likeCol">{{ep.like}} &nbsp;&nbsp;</div>
+					<div class="l2 w3-col"><span class="w3-circle" ng-click="augmenter(ep)" ><i class="fa fa-thumbs-up" aria-hidden="true" data-></i><span></div>
 
 				</div>
 			</div>
@@ -118,21 +158,90 @@
 
 	<script>
 
+		var episodeIds = [];
+
+
 		var episodesApp = angular.module('episodesApp',[]);
 
 		episodesApp.controller('episodesController', function($http, $scope) {
+
+			
+
 			$http.get('/episodes').success(function(response) {
 				var res = response;
 				res.forEach(function(elt, index, tab) {
 					var s = +elt.duration;
-					console.log(Math.round(s/60));
-					elt.duration = Math.round(s/60) + "min " + (s%60) + " sec";
-
+					elt.durationMsg = Math.round(s/60) + "min " + (s%60) + " sec";
+					elt.liked = false;
+					episodeIds.push(elt.id);
+					
 				});
 				$scope.episodes = res;
+				$scope.recharger();
 			});
+			$scope.augmenter = function(ep) {
+				if(!ep.liked) {
+					ep.like = (+ep.like)+1;
+					ep.liked=true;
+					console.log(ep);
+					window.localStorage['got_episode_' + ep.id +'_like'] = ep.like;
+				}
+			};
+
+			$scope.recharger = function() {
+				console.log("recharger called " + $scope.episodes.length + ' mit ' + window.localStorage.gotTabNum);
+				$scope.episodes.forEach(function(elt, index, tab) {
+					var like = window.localStorage['got_episode_' + elt.id + '_like' ];
+					if(like) {
+						elt.like = like;
+						console.log(elt.like + " " + like);
+					}
+				});	
+			};
+
+
+			$scope.$on('$locationChangeStart', function(evt) {
+				//window.alert('happy');
+				console.log(window.shifsodifjsd);
+				--window.localStorage.gotTabNum;
+				if(!window.localStorage.gotTabNum) {
+					$scope.episodes.forEach(function(elt, index, tab) {
+						window.localStorage.removeItem('got_episode_' + elt.id + '_like');
+					});
+				}
+			})
+
+
 		});
 
+		window.addEventListener('load',function(e) {
+
+			if(localStorage.getItem('gotTabNum') === null) {
+				console.log('a novueau');
+				localStorage.gotTabNum = 1;
+			} else {
+				var n = +localStorage.gotTabNum;
+				//window.alert('was tere');
+				localStorage.setItem('gotTabNum', n+1 );
+			}
+			window.alert('begin : ' + window.localStorage.gotTabNum);
+			console.log(localStorage.gotTabNum);
+		});		
+
+		$(window).on('unload', function(e) {
+			//window.open('http://www.ddg.gg');
+			console.log('unload yeah');
+			//window.alert('catch');
+			window.localStorage.gotTabNum = +window.localStorage.gotTabNum - 1;
+
+			if(!window.localStorage.gotTabNum) {
+				for(var i = 0;  i< episodeIds.length; i++) {
+					window.localStorage.removeItem('got_episode_' + episodeIds[i] + '_like');
+				}
+				//window.alert(window.localStorage);
+				window.localStorage.removeItem('gotTabNum');
+			}
+		});
 
 	</script>
 

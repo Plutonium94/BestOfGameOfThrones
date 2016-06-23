@@ -1,0 +1,149 @@
+@font-face {
+	font-family: 'goffont';
+	src: url('/fonts/game_of_thrones-webfont.woff2') format('woff2'),
+		 url('/fonts/game_of_thrones-webfont.woff') format('woff'),
+		  url('/fonts/game_of_thrones-webfont#game_of_thronesregular.svg') format('svg');
+
+}
+
+#page {
+	background-image: url("/images/bg.jpg");
+	background-repeat: no-repeat;
+	background-color: rgb(14,20,20);
+	/*background-position: 0px -60px;*/
+	background-size: contain;
+	padding: 0px;
+	font-family: Abel;
+}
+
+#topHalf  {
+	height : 400px;
+}
+
+@media screen and (min-width: 993px) {
+	#topHalf > .w3-row {
+		height: 133px;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#topHalf {
+		margin-bottom: -150px;
+	}
+}
+
+
+@media screen and (max-width: 500px) {
+	#topHalf .w3-row.smallerSmall {
+		height: 62px;
+	}
+}
+
+@media screen and (max-width: 435px) {
+	#topHalf div#panneau{
+		height: 75px;
+	}
+
+	#topHalf div#panneau >h1 {
+		font-size: 25px;
+	}
+}
+
+
+#topHalf > .w3-row {
+	height: 80px;
+}
+
+
+#topHalf #reloadButton {
+	font-size: 28px;
+	color: white;
+	background: none;
+}
+
+#panneau {
+	background-color:rgba(135,156,210, 0.3);
+	text-align: center;
+	margin-top: 5%;
+	margin-bottom: 5%;
+}
+
+#panneau > h1 {
+	font-weight: bold;
+	color: black;
+}
+
+#bottomHalf {
+	height: 500px;
+}
+
+#bottomHalf {
+	background-color: rgb(14,20,20);
+	color: white;
+}
+
+#bottomHalf > .w3-col:first-child, #panneau > h1 {
+	font-family: 'goffont', 'Times New Roman', serif;
+
+
+}
+
+#bottomHalf > .w3-col:first-child {
+	text-align: center;
+	font-weight: bold;
+	/*display: flex;*/
+	/*justify-content: center;
+	display: table-cell;
+	vertical-align: middle;*/
+}
+
+#bottomHalf > .w3-col:first-child #season {
+	font-size: 40px;
+}
+#bottomHalf > .w3-col:first-child #seasonNo {
+	font-size: 140px;
+	padding-left: 15px;
+}
+
+@media screen and (min-width: 993px) {
+
+	#bottomHalf > .w3-col:first-child {
+
+		padding : 10% 0;
+		margin-top: -5%;
+	}
+
+	#bottomHalf > .w3-col:first-child #seasonNo {
+		padding-left: 0px;
+	}
+
+}
+
+#bottomHalf > .w3-col:first-child > div {
+	align-self: center;
+	display: inline-block;
+	font-size: 2em;
+}
+
+#bottomHalf > .w3-col:first-child span:nth-of-type(2) {
+	color: rgb(13,31,68);
+}
+
+#bottomHalf .duration {
+	color: rgb(84,88,88);
+}
+
+#bottomHalf .souligne {
+	border-bottom: 1px solid rgb(64,68,68);
+}
+
+#bottomHalf .likeCol {
+	text-align: right;
+}
+
+.w3-circle {
+	background: none;
+	font-size: 0.5em;
+	border: 1px solid white;
+	padding : 4px;
+}

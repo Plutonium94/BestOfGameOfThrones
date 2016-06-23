@@ -11,10 +11,11 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 	<link rel="stylesheet" href="/css/style.css">
 	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+	<script src="/js/script.js"></script>
 </head>
 <body ng-app="episodesApp" ng-controller="episodesController">
 
-	<div class="w3-container" id="page">
+	<div class="w3-container" id="page" itemscope itemtype="http://schema.org/TVSeries">
 
 		<!-- <img src="/images/bg.jpg" style="visibility: hidden" > -->
 		<div class="w3-row " id="topHalf">
@@ -41,15 +42,23 @@
 		</div>
 
 		<div class="w3-row" id="bottomHalf">
-			<div class="w3-col l6 m12 s12">
-				<div><span id="season">Season</span><br class="w3-hide-small w3-hide-medium"><span id="seasonNo">6</span></div>
+			<div class="w3-col l6 m12 s12" itemscope itemtype="http://schema.org/TVSeason">
+				<div><span id="season">Season</span><br class="w3-hide-small w3-hide-medium"><span id="seasonNo" itemprop="seasonNumber">6</span></div>
 			</div>
 
 			<div class="w3-col l6 w3-container s12 m12 w3-padding"  >
-				<div class="w3-row" ng-repeat="ep in episodes" data-id="{{ep.id}}">
-					<div class=" w3-container w3-col l4 m3 s7">{{ep.title}}<br><span class="duration">{{ep.durationMsg}}</span></div>
+				<div class="w3-row" ng-repeat="ep in episodes" data-id="{{ep.id}}" itemscope itemtype="http://schema.org/TVEpisode">
+					<meta itemprop="episodeNumber" content="{{ep.episode}}">
+					<meta itemprope="duration" content="P{{ep.duration}}S">
+					<div class=" w3-container w3-col l4 m3 s7">
+						<span itemprop="name">{{ep.title}}</span><br><span class="duration">{{ep.durationMsg}}</span>
+					</div>
 					<div class="w3-col l1 m1 s1 souligne w3-container">&nbsp;</div>
-					<div class="l3 s2 w3-col likeCol">{{ep.like}} &nbsp;&nbsp;</div>
+					<div class="l3 s2 w3-col likeCol" itemscope itemprop="aggregateRating" itemtype="http://schema.org/AggregateRating">
+						<meta itemprop="ratingValue" content="1">
+						<meta itemprop="ratingCount" content="{{ep.like}}">
+						{{ep.like}} &nbsp;&nbsp;
+					</div>
 					<div class="l2 w3-col s1"><span class="w3-circle" ng-click="augmenter(ep)" ><i class="fa fa-thumbs-up" aria-hidden="true" data-></i><span></div>
 
 				</div>
@@ -59,85 +68,7 @@
 	</div>
 
 
-	<script>
-
-		var episodeIds = [];
-
-
-		var episodesApp = angular.module('episodesApp',[]);
-
-		episodesApp.controller('episodesController', function($http, $scope) {
-
-			
-
-			$http.get('/episodes').success(function(response) {
-				var res = response;
-				res.forEach(function(elt, index, tab) {
-					var s = +elt.duration;
-					elt.durationMsg = Math.round(s/60) + "min " + (s%60) + " sec";
-					elt.liked = false;
-					episodeIds.push(elt.id);
-					
-				});
-				$scope.episodes = res;
-				$scope.recharger();
-			});
-			$scope.augmenter = function(ep) {
-				if(!ep.liked) {
-					ep.like = (+ep.like)+1;
-					ep.liked=true;
-					console.log(ep);
-					window.localStorage['got_episode_' + ep.id +'_like'] = ep.like;
-				}
-			};
-
-			$scope.recharger = function() {
-				console.log("recharger called " + $scope.episodes.length + ' mit ' + window.localStorage.getItem('gotTabNum'));
-				$scope.episodes.forEach(function(elt, index, tab) {
-					var like = window.localStorage['got_episode_' + elt.id + '_like' ];
-					if(like) {
-						elt.like = like;
-					}
-				});	
-			};
-
-
-			
-
-
-		});
-
 	
-		/* Augmenter le compteur d'onglets au chargmeent */
-		window.addEventListener('load',function(e) {
-			if(!localStorage.getItem('gotTabNum') || localStorage.getItem('gotTabNum') < 0) {
-				//console.log('a novueau');
-				localStorage.setItem('gotTabNum', 1);
-				//alert('a nouveau ' + localStorage.getItem('gotTabNum'));
-			} else {
-				var n = +localStorage.getItem('gotTabNum');
-				//window.alert('me window ' + n);
-				localStorage.setItem('gotTabNum', (n+1) );
-			}
-		});		
-
-
-
-		
-		/* Si le nombre d'onglets <= 0, effacer localStorage : le compteur et les likes */
-		$(window).unload(function() {
-			//console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
-			//console.log(+window.localStorage.getItem('gotTabNum'));			
-			window.localStorage.setItem('gotTabNum', +window.localStorage.getItem('gotTabNum') - 1);
-			//console.log(+window.localStorage.getItem('gotTabNum'));			
-			//console.log('over');
-			if(+window.localStorage.getItem('gotTabNum') <= 0) {
-				
-				localStorage.clear();
-			}
-		});
-
-	</script>
 
 
 </body>

@@ -4,7 +4,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
 	<title>Game of Thrones - Best Episodes</title>
-	<link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css" type="text/css">
+	<link rel="stylesheet" href="/css/w3.css" type="text/css">
 	<script src = "https://ajax.googleapis.com/ajax/libs/angularjs/1.3.3/angular.min.js"></script>
 	<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
@@ -19,7 +19,7 @@
 		<!-- <img src="/images/bg.jpg" style="visibility: hidden" > -->
 		<div class="w3-row " id="topHalf">
 
-			<div class="w3-row">
+			<div class="w3-row smallerSmall">
 				<div class="w3-col w3-container">
 					<div id="reloadButton" type="button" class="w3-right" ng-click="recharger()"><i class="fa fa-refresh" ></i></div>
 				</div>
@@ -27,13 +27,13 @@
 			</div>
 
 			<div class="w3-row">
-				<div class="w3-third m2 s12">&nbsp;</div>
+				<div class="w3-third m2 w3-hide-small ">&nbsp;</div>
 				<div class="w3-third m8 s12" id="panneau"><h1>Game of Thrones</h1><p>best episodes</p></div>
-				<div class="w3-third m2 s12">&nbsp;</div>
+				<div class="w3-third m2 w3-hide-small">&nbsp;</div>
 			</div>
 
 
-			<div class="w3-row" >
+			<div class="w3-row smallerSmall" >
 				
 			</div>
 
@@ -42,15 +42,15 @@
 
 		<div class="w3-row" id="bottomHalf">
 			<div class="w3-col l6 m12 s12">
-				<div><span>Season</span><br><span>6</span></div>
+				<div><span id="season">Season</span><br class="w3-hide-small w3-hide-medium"><span id="seasonNo">6</span></div>
 			</div>
 
-			<div class="w3-half w3-container s12 m12"  >
+			<div class="w3-col l6 w3-container s12 m12 w3-padding"  >
 				<div class="w3-row" ng-repeat="ep in episodes" data-id="{{ep.id}}">
-					<div class=" w3-container w3-col l4 m3 s8">{{ep.title}}<br><span class="duration">{{ep.durationMsg}}</span></div>
-					<div class="w3-col l1 m1 s1 souligne w3-container"></div>
-					<div class="l3 s3 w3-col likeCol">{{ep.like}} &nbsp;&nbsp;</div>
-					<div class="l2 w3-col"><span class="w3-circle" ng-click="augmenter(ep)" ><i class="fa fa-thumbs-up" aria-hidden="true" data-></i><span></div>
+					<div class=" w3-container w3-col l4 m3 s7">{{ep.title}}<br><span class="duration">{{ep.durationMsg}}</span></div>
+					<div class="w3-col l1 m1 s1 souligne w3-container">&nbsp;</div>
+					<div class="l3 s2 w3-col likeCol">{{ep.like}} &nbsp;&nbsp;</div>
+					<div class="l2 w3-col s1"><span class="w3-circle" ng-click="augmenter(ep)" ><i class="fa fa-thumbs-up" aria-hidden="true" data-></i><span></div>
 
 				</div>
 			</div>

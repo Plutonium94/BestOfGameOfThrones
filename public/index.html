@@ -9,105 +9,8 @@
 	<link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet' type='text/css'>
 	<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
-	<style>
-
-		@font-face {
-			font-family: 'goffont';
-			src: url('/fonts/game_of_thrones-webfont.woff2') format('woff2'),
-				 url('/fonts/game_of_thrones-webfont.woff') format('woff'),
-				  url('/fonts/game_of_thrones-webfont#game_of_thronesregular.svg') format('svg');
-
-		}
-
-		#page {
-			background-image: url("./images/bg.jpg");
-			background-repeat: no-repeat;
-			background-color: rgb(14,20,20);
-			/*background-position: 0px -60px;*/
-			background-size: contain;
-			padding: 0px;
-			font-family: Abel;
-		}
-
-		#topHalf  {
-			height : 400px;
-		}
-
-		#topHalf div {
-			height: 133px;
-		}
-
-		#topHalf #reloadButton {
-			font-size: 28px;
-			color: white;
-			background: none;
-		}
-
-		#panneau {
-			background-color:rgba(135,156,210, 0.3);
-			text-align: center;
-		}
-
-		#panneau > h1 {
-			font-weight: bold;
-			color: black;
-		}
-
-		#bottomHalf {
-			height: 500px;
-		}
-
-		#bottomHalf {
-			background-color: rgb(14,20,20);
-			color: white;
-		}
-
-		#bottomHalf > .w3-col:first-child, #panneau > h1 {
-			font-family: 'goffont', 'Times New Roman', serif;
-
-
-		}
-
-		#bottomHalf > .w3-col:first-child {
-			font-size: 200%;	
-			text-align: center;
-			font-weight: bold;
-			/*display: flex;*/
-			justify-content: center;
-			display: table-cell;
-			vertical-align: middle;
-		}
-
-		#bottomHalf > .w3-col:first-child > div {
-			align-self: center;
-			display: inline-block;
-		}
-
-		#bottomHalf > .w3-col:first-child span:nth-of-type(2) {
-			color: rgb(13,31,68);
-		}
-
-		#bottomHalf .duration {
-			color: rgb(84,88,88);
-		}
-
-		#bottomHalf .souligne {
-			border-bottom: 1px solid rgb(64,68,68);
-		}
-
-		#bottomHalf .likeCol {
-			text-align: right;
-		}
-
-		.w3-circle {
-			background: none;
-			font-size: 0.5em;
-			border: 1px solid white;
-			padding : 4px;
-		}
-
-	</style>
+	<link rel="stylesheet" href="/css/style.css">
+	<script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 </head>
 <body ng-app="episodesApp" ng-controller="episodesController">
 
@@ -125,7 +28,7 @@
 
 			<div class="w3-row">
 				<div class="w3-third m2 s12">&nbsp;</div>
-				<div class="w3-third m8 s12" id="panneau"><h1>Game of Thrones</h1><p>Best episodes</p></div>
+				<div class="w3-third m8 s12" id="panneau"><h1>Game of Thrones</h1><p>best episodes</p></div>
 				<div class="w3-third m2 s12">&nbsp;</div>
 			</div>
 
@@ -189,57 +92,48 @@
 			};
 
 			$scope.recharger = function() {
-				console.log("recharger called " + $scope.episodes.length + ' mit ' + window.localStorage.gotTabNum);
+				console.log("recharger called " + $scope.episodes.length + ' mit ' + window.localStorage.getItem('gotTabNum'));
 				$scope.episodes.forEach(function(elt, index, tab) {
 					var like = window.localStorage['got_episode_' + elt.id + '_like' ];
 					if(like) {
 						elt.like = like;
-						console.log(elt.like + " " + like);
 					}
 				});	
 			};
 
 
-			$scope.$on('$locationChangeStart', function(evt) {
-				//window.alert('happy');
-				console.log(window.shifsodifjsd);
-				--window.localStorage.gotTabNum;
-				if(!window.localStorage.gotTabNum) {
-					$scope.episodes.forEach(function(elt, index, tab) {
-						window.localStorage.removeItem('got_episode_' + elt.id + '_like');
-					});
-				}
-			})
+			
 
 
 		});
 
+	
+		/* Augmenter le compteur d'onglets au chargmeent */
 		window.addEventListener('load',function(e) {
-
-			if(localStorage.getItem('gotTabNum') === null) {
-				console.log('a novueau');
-				localStorage.gotTabNum = 1;
+			if(!localStorage.getItem('gotTabNum') || localStorage.getItem('gotTabNum') < 0) {
+				//console.log('a novueau');
+				localStorage.setItem('gotTabNum', 1);
+				//alert('a nouveau ' + localStorage.getItem('gotTabNum'));
 			} else {
-				var n = +localStorage.gotTabNum;
-				//window.alert('was tere');
-				localStorage.setItem('gotTabNum', n+1 );
+				var n = +localStorage.getItem('gotTabNum');
+				//window.alert('me window ' + n);
+				localStorage.setItem('gotTabNum', (n+1) );
 			}
-			window.alert('begin : ' + window.localStorage.gotTabNum);
-			console.log(localStorage.gotTabNum);
 		});		
 
-		$(window).on('unload', function(e) {
-			//window.open('http://www.ddg.gg');
-			console.log('unload yeah');
-			//window.alert('catch');
-			window.localStorage.gotTabNum = +window.localStorage.gotTabNum - 1;
 
-			if(!window.localStorage.gotTabNum) {
-				for(var i = 0;  i< episodeIds.length; i++) {
-					window.localStorage.removeItem('got_episode_' + episodeIds[i] + '_like');
-				}
-				//window.alert(window.localStorage);
-				window.localStorage.removeItem('gotTabNum');
+
+		
+		/* Si le nombre d'onglets <= 0, effacer localStorage : le compteur et les likes */
+		$(window).unload(function() {
+			//console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz');
+			//console.log(+window.localStorage.getItem('gotTabNum'));			
+			window.localStorage.setItem('gotTabNum', +window.localStorage.getItem('gotTabNum') - 1);
+			//console.log(+window.localStorage.getItem('gotTabNum'));			
+			//console.log('over');
+			if(+window.localStorage.getItem('gotTabNum') <= 0) {
+				
+				localStorage.clear();
 			}
 		});
 
